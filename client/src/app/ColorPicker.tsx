@@ -7,7 +7,7 @@ export function ColorPicker() {
       <input
         value={store.selectedColor}
         type="color"
-        onChange={e => setColor(e.target.value)}
+        onInput={e => setColor(e.target.value)}
       />
     </label>
   )
