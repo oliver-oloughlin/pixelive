@@ -7,7 +7,7 @@ export function DrawPixel({ signal }: { signal: Signal<Pixel> }) {
   return (
     <div 
       onPointerDown={() => setPixel({ index: pixel().index, color: store.selectedColor })}
-      class="hover:backdrop-brightness-75 aspect-square"
+      class="hover:backdrop-brightness-75 hover:invert-[50%] aspect-square"
       style={{ "background-color": pixel().color }}
     />
   )

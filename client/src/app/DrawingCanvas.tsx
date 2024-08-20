@@ -1,4 +1,4 @@
-import { DrawPixel } from "./Pixel";
+import { DrawPixel } from "./DrawPixel";
 import { store } from "../utils/store";
 
 export function DrawingBoard() {

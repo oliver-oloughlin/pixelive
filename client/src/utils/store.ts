@@ -31,7 +31,7 @@ export type AppState = {
 const [store, setStore] = createStore<AppState>({
   theme: null,
   pixelsResource: createResource(fetchPixels),
-  selectedColor: "black",
+  selectedColor: "#ff0000",
   pixels: defaultPixels().map((pixel) => createSignal(pixel))
 })
 
@@ -53,4 +53,10 @@ function setTheme(theme: Theme) {
   })
 }
 
-export { store, setPixel, setTheme }
+function setColor(color: string) {
+  setStore({
+    selectedColor: color
+  })
+}
+
+export { store, setPixel, setTheme, setColor }
