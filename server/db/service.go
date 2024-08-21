@@ -1,7 +1,8 @@
 package db
 
 func GetPixels() []Pixel {
-	rows, err := database.Query("SELECT * FROM pixels")
+	db := get_db()
+	rows, err := db.Query("SELECT * FROM pixels")
 	var pixels []Pixel
 
 	if err != nil {
@@ -13,7 +14,7 @@ func GetPixels() []Pixel {
 	for rows.Next() {
 		var pixel Pixel
 
-		if err := rows.Scan(&pixel.X, &pixel.Y, &pixel.Color); err != nil {
+		if err := rows.Scan(&pixel.id, &pixel.color); err != nil {
 			return pixels
 		}
 
@@ -21,4 +22,9 @@ func GetPixels() []Pixel {
 	}
 
 	return pixels
+}
+
+func UpdatePixel(pixel Pixel) {
+	db := get_db()
+	db.Exec("UPDATE pixels SET color = ? WHERE id = ?", pixel.color, pixel.id)
 }

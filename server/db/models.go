@@ -1,7 +1,6 @@
 package db
 
 type Pixel struct {
-	X     int
-	Y     int
-	Color string
+	id    int
+	color string
 }

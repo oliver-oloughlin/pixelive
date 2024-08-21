@@ -2,18 +2,27 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
+	"log"
 	"os"
+
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
 
+var db *sql.DB
+
 func connect() *sql.DB {
-	db, err := sql.Open("libsql", "")
+	connection_str := os.Getenv("TURSO_CONNECTION_STRING")
+	database, err := sql.Open("libsql", connection_str)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to open db %s", err)
-		os.Exit(1)
+		log.Fatalf(os.Stderr.Name(), "failed to open db %s", err)
 	}
-	defer db.Close()
-	return db
+	return database
 }
 
-var database = connect()
+func get_db() *sql.DB {
+	if db == nil {
+		db = connect()
+	}
+
+	return db
+}
