@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"pixelive/api"
-	"pixelive/db"
 
 	"github.com/joho/godotenv"
 )
@@ -21,6 +20,5 @@ func main() {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	db.Init()
-	// serve()
+	serve()
 }

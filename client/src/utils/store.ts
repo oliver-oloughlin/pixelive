@@ -3,44 +3,40 @@ import { createResource, createSignal, ResourceReturn, Signal } from "solid-js"
 import { Pixel, Theme } from "./models"
 import { api } from "./api"
 
-function defaultPixels() {
-  const pixels: Pixel[] = []
-  for (let i = 0; i < 100 * 100; i++) {
-    pixels.push({
-      index: i,
-      color: "transparent"
-    })
-  }
-  return pixels
-}
-
-async function fetchPixels(): Promise<Pixel[]> {
+async function fetchPixels(): Promise<Map<number, Signal<string>>> {
   const res = await api.pixels.get()
-  if (!res.ok) return defaultPixels()
+  if (!res.ok) {
+    throw res.error
+  }
 
-  return res.data
+  const pixels = new Map<number, Signal<string>>()
+  
+  res.data.forEach(({ id, color }) => {
+    pixels.set(id, createSignal(color))
+  })
+
+  return pixels
 }
 
 export type AppState = {
   theme: Theme
-  pixelsResource: ResourceReturn<Pixel[]>
+  pixelsResource: ResourceReturn<Map<number, Signal<string>>>
   selectedColor: string
-  pixels: Signal<Pixel>[]
 }
 
 const [store, setStore] = createStore<AppState>({
   theme: null,
   pixelsResource: createResource(fetchPixels),
   selectedColor: "#ff0000",
-  pixels: defaultPixels().map((pixel) => createSignal(pixel))
 })
 
 async function setPixel(pixel: Pixel) {
-  const signal = store.pixels[pixel.index]
+  const [pixels] = store.pixelsResource
+  const signal = pixels()?.get(pixel.id)
   if (!signal) return
 
   const [_, setValue] = signal
-  setValue(pixel)
+  setValue(pixel.color)
 
   await api.pixels.post({
     body: pixel

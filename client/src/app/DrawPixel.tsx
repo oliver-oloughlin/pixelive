@@ -1,14 +1,13 @@
 import { Signal } from "solid-js";
-import type { Pixel } from "../utils/models";
 import { setPixel, store } from "../utils/store"
 
-export function DrawPixel({ signal }: { signal: Signal<Pixel> }) {
-  const [pixel] = signal
+export function DrawPixel({ id, signal }: { id: number, signal: Signal<string> }) {
+  const [color] = signal
   return (
     <div 
-      onPointerDown={() => setPixel({ index: pixel().index, color: store.selectedColor })}
+      onPointerDown={() => setPixel({ id, color: store.selectedColor })}
       class="hover:backdrop-brightness-75 hover:invert-[50%] aspect-square"
-      style={{ "background-color": pixel().color }}
+      style={{ "background-color": color() }}
     />
   )
 }

@@ -1,6 +1,6 @@
 package db
 
 type Pixel struct {
-	id    int
-	color string
+	ID    int    `json:"id"`
+	Color string `json:"color"`
 }

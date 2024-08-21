@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const PixelSchema = z.object({
-  index: z.number(),
+  id: z.number(),
   color: z.string(),
 })
 
