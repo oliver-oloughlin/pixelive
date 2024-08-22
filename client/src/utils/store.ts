@@ -2,6 +2,7 @@ import { createStore } from "solid-js/store"
 import { createResource, createSignal, ResourceReturn, Signal } from "solid-js"
 import { Pixel, Theme } from "./models"
 import { api } from "./api"
+import { apiWs } from "./api_ws"
 
 async function fetchPixels(): Promise<Map<number, Signal<string>>> {
   const res = await api.pixels.get()
@@ -31,16 +32,14 @@ const [store, setStore] = createStore<AppState>({
 })
 
 async function setPixel(pixel: Pixel) {
+  apiWs.setPixel(pixel)
+  
   const [pixels] = store.pixelsResource
   const signal = pixels()?.get(pixel.id)
   if (!signal) return
 
   const [_, setValue] = signal
   setValue(pixel.color)
-
-  await api.pixels.post({
-    body: pixel
-  })
 }
 
 function setTheme(theme: Theme) {
