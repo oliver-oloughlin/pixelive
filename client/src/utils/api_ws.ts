@@ -2,12 +2,12 @@ import { Pixel, PixelSchema } from "./models"
 import { setPixel } from "./store"
 
 class ApiWebSocket {
-  private retries: number
+  private attempts: number
   private ws: WebSocket | null
   public onSetPixel: ((pixel: Pixel) => unknown) | null
 
-  constructor() {
-    this.retries = 10
+  constructor(attempts?: number) {
+    this.attempts = Math.max(1, attempts ?? 1)
     this.onSetPixel = null
     this.ws = this.createWs()
   }
@@ -21,8 +21,8 @@ class ApiWebSocket {
   }
 
   private createWs() {
-    if (this.retries <= 0) return null
-    this.retries--
+    if (this.attempts <= 0) return null
+    this.attempts--
 
     const ws = new WebSocket("ws://localhost:8080/ws")
 
