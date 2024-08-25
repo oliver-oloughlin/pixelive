@@ -31,9 +31,7 @@ const [store, setStore] = createStore<AppState>({
   selectedColor: "#ff0000",
 })
 
-async function setPixel(pixel: Pixel) {
-  apiWs.setPixel(pixel)
-  
+function setPixel(pixel: Pixel) {
   const [pixels] = store.pixelsResource
   const signal = pixels()?.get(pixel.id)
   if (!signal) return

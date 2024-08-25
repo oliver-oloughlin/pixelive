@@ -13,6 +13,7 @@ class ApiWebSocket {
   }
 
   setPixel(pixel: Pixel) {
+    console.log("Set:", pixel)
     this.ws?.send(JSON.stringify(pixel))
   }
 
@@ -21,9 +22,11 @@ class ApiWebSocket {
   }
 
   private createWs() {
-    if (this.attempts <= 0) return null
-    this.attempts--
+    if (this.attempts <= 0) {
+      return null
+    }
 
+    this.attempts--
     const ws = new WebSocket("ws://localhost:8080/ws")
 
     ws.onmessage = async (msg) => {

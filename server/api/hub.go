@@ -1,7 +1,9 @@
 package api
 
 import (
+	"encoding/json"
 	"log"
+	"pixelive/db"
 )
 
 type Hub struct {
@@ -35,6 +37,12 @@ func (h *Hub) Run() {
 			}
 
 		case msg := <-h.broadcast:
+			go func() {
+				var pixel db.Pixel
+				json.Unmarshal(msg, &pixel)
+				db.UpdatePixel(pixel)
+			}()
+
 			for client := range h.clients {
 				select {
 				case client.send <- msg:

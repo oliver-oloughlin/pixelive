@@ -1,10 +1,8 @@
 package api
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
-	"pixelive/db"
 	"time"
 
 	"github.com/google/uuid"
@@ -49,35 +47,6 @@ func WSHandler(hub *Hub, w http.ResponseWriter, r *http.Request) {
 
 	go client.writePump()
 	go client.readPump()
-
-	// for {
-	// 	mt, message, err := c.ReadMessage()
-
-	// 	if err != nil {
-	// 		log.Println("read:", err)
-	// 		delete(connections, id)
-	// 		break
-	// 	}
-
-	// 	var pixel db.Pixel
-	// 	json.Unmarshal(message, &pixel)
-	// 	err = db.UpdatePixel(pixel)
-
-	// 	if err != nil {
-	// 		log.Println("update:", err)
-	// 		delete(connections, id)
-	// 		break
-	// 	}
-
-	// 	for connId, connection := range connections {
-	// 		err := connection.WriteMessage(mt, message)
-	// 		if err != nil {
-	// 			log.Println("write:", err)
-	// 			delete(connections, connId)
-	// 			continue
-	// 		}
-	// 	}
-	// }
 }
 
 func (c *Client) readPump() {
@@ -95,16 +64,9 @@ func (c *Client) readPump() {
 
 	for {
 		_, msg, err := c.conn.ReadMessage()
-		if err != nil && websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+		if err != nil {
 			log.Printf("read error: %v", err)
 			break
-		}
-
-		var pixel db.Pixel
-		json.Unmarshal(msg, &pixel)
-
-		if err := db.UpdatePixel(pixel); err != nil {
-			continue
 		}
 
 		c.hub.broadcast <- msg
