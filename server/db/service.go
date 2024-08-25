@@ -26,6 +26,6 @@ func GetPixels() []Pixel {
 
 func UpdatePixel(pixel Pixel) error {
 	db := get_db()
-	_, err := db.Exec("UPDATE pixels SET color = ? WHERE id = ?", pixel.Color, pixel.ID)
+	_, err := db.Exec("UPDATE pixels SET color = $1 WHERE id = $2", pixel.Color, pixel.ID)
 	return err
 }

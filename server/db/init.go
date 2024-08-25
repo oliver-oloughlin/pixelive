@@ -2,6 +2,7 @@ package db
 
 import (
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -10,19 +11,14 @@ func Init() {
 	query := "INSERT INTO pixels (id, color) VALUES "
 	vals := []interface{}{}
 
-	for i := 0; i < 100*100; i++ {
-		query += "(?, ?),"
-		vals = append(vals, i, "transparent")
+	for i := 1; i <= 100*100; i++ {
+		query += "($" + strconv.Itoa(i*2-1) + ",$" + strconv.Itoa(i*2) + "),"
+		vals = append(vals, i-1, "transparent")
 	}
 
 	query = strings.TrimSuffix(query, ",")
 
-	stmt, err := db.Prepare(query)
-	if err != nil {
-		log.Fatalln("Failed prepare:", err)
-	}
-
-	_, err = stmt.Exec(vals...)
+	_, err := db.Exec(query, vals...)
 	if err != nil {
 		log.Fatalln("Failed exec:", err)
 	}
