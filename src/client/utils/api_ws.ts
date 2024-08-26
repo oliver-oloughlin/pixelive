@@ -26,12 +26,13 @@ class ApiWebSocket {
     }
 
     this.attempts--;
-
-    const isLocal =
-      location.hostname === "localhost" || location.hostname === "127.0.0.1";
+    const isDev = location.host === "localhost:4000";
+    const protocol = location.protocol === "http:" ? "ws:" : "wss:";
 
     const ws = new WebSocket(
-      isLocal ? "ws://localhost:8000/api/ws" : `wss://${location.host}/api/ws`,
+      isDev
+        ? "ws://localhost:8000/api/ws"
+        : `${protocol}//${location.host}/api/ws`,
     );
 
     ws.onmessage = async (msg) => {
