@@ -3,16 +3,16 @@ import { PixelSchema } from "./models";
 import { logger } from "@olli/jex/logger";
 
 export const api = jex({
-  baseUrl: "http://localhost:8080",
+  baseUrl: "/api",
   plugins: [logger()],
   endpoints: {
     pixels: {
       get: {
-        data: PixelSchema.array()
+        data: PixelSchema.array(),
       },
       post: {
-        body: PixelSchema
-      }
-    }
-  }
-})
+        body: PixelSchema,
+      },
+    },
+  },
+});
