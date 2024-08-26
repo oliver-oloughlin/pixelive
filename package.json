@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "npm run dev:client & npm run dev:server",
-    "dev:server": "cd ./src/server && go run .",
+    "dev:server": "go run . dev",
     "dev:client": "vite",
     "build": "tsc -b && vite build",
-    "start": "vite preview",
+    "start": "go run .",
     "format": "npx prettier . --write",
     "format:check": "npx prettier . --check"
   },

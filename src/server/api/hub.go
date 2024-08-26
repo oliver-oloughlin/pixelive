@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"log"
-	"pixelive/db"
+	"pixelive/src/server/db"
 )
 
 type Hub struct {

@@ -5,22 +5,25 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"pixelive/api"
+	"pixelive/src/server/api"
 
 	"github.com/joho/godotenv"
 )
 
 func serve() {
 	args := os.Args
-	isDev := args[0] == "dev"
+	isDev := args[1] == "dev"
+	mux := http.NewServeMux()
 
 	hub := api.NewHub()
 	go hub.Run()
 
-	mux := http.NewServeMux()
+	if isDev {
+		mux.Handle("/api", api.EnableCORS(mux))
+	}
 
-	http.HandleFunc("/api/pixels", api.PixelsHandler)
-	http.HandleFunc("/api/ws", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/pixels", api.PixelsHandler)
+	mux.HandleFunc("/api/ws", func(w http.ResponseWriter, r *http.Request) {
 		api.WSHandler(hub, w, r)
 	})
 
@@ -35,10 +38,10 @@ func serve() {
 					return
 			}
 			fileServer.ServeHTTP(w, r)
-	})
+		})
 	}
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8000", mux))
 }
 
 func main() {

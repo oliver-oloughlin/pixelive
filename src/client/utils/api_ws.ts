@@ -26,7 +26,13 @@ class ApiWebSocket {
     }
 
     this.attempts--;
-    const ws = new WebSocket("ws://localhost:8080/api/ws");
+
+    const isLocal =
+      location.hostname === "localhost" || location.hostname === "127.0.0.1";
+
+    const ws = new WebSocket(
+      isLocal ? "ws://localhost:8000/api/ws" : `wss://${location.host}/api/ws`,
+    );
 
     ws.onmessage = async (msg) => {
       try {
