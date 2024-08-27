@@ -10,9 +10,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var args = os.Args
+var isDev = len(args) > 1 && args[1] == "dev"
+
 func serve() {
-	args := os.Args
-	isDev := args[1] == "dev"
 	mux := http.NewServeMux()
 
 	hub := api.NewHub()
@@ -45,9 +46,11 @@ func serve() {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+	if (isDev) {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatalf("Error loading .env file: %v", err)
+		}
 	}
 
 	serve()
