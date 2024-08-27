@@ -13,7 +13,7 @@
     "format:check": "npx prettier . --check"
   },
   "dependencies": {
-    "@olli/jex": "^0.6.3",
+    "@olli/jex": "npm:@jsr/olli__jex@^0.6.4",
     "solid-js": "^1.8.20",
     "tailwind-merge": "^2.5.2",
     "zod": "^3.23.8"
